@@ -9,14 +9,43 @@ User Story: If it does not contain a date or Unix timestamp, it returns null for
 */
 var express = require ('express');
 var app = express();
+
+
 var url = require('url');
 var urlParse;
+var nattylangDate = new RegExp('([a-z]{3,9}\\s\\d{1,2}[,]\\s\\d{4})','gi');
+var unixDate = new RegExp('(\\d{1,14})','g');
+var tmpObj ={};
 app.listen(process.env.PORT || 8080, ()=>{console.log("Server listening on ", process.env.PORT || 8080); });
 
-app.get('/time/:queryString', (req,res)=>{
+app.get('/:queryString', (req,res)=>{
+
 urlParse = url.parse(req.url,true);
-res.json(urlParse);
-res.end(req.params.queryString);
+var queryString = req.params.queryString.toString();
+
+if (queryString.search(nattylangDate) >= 0) {
+tmpObj.unix = Date.parse(queryString);
+tmpObj.natural = queryString;
+res.json(tmpObj);
+tmpObj ={};
+}
+// the unix date regexp is picking up partial matches e.x 23939203909sdkasdlk which shouldn't be happening
+else if (+queryString.search(unixDate) >= 0) {
+var dateObj = new Date(+queryString);
+tmpObj.unix = +queryString;
+tmpObj.natural = dateObj.toLocaleString('en-us',{month:'long'})+" "+dateObj.getDate()+", "+dateObj.getFullYear();
+res.json(tmpObj);
+tmpObj = {};
+
+}
+
+  else {
+    tmpObj.unix = null;
+    tmpObj.natural = null;
+    res.json(tmpObj);
+    tmpObj = {};
+  }
+
 
 });
 
