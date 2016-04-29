@@ -13,8 +13,8 @@ var app = express();
 
 var url = require('url');
 var urlParse;
-var nattylangDate = new RegExp('([a-z]{3,9}\\s\\d{1,2}[,]\\s\\d{4})','gi');
-var unixDate = new RegExp('(\\d{1,14})','g');
+var nattylangDate = new RegExp('(^[a-z]{3,9}\\s\\d{1,2}[,]\\s\\d{4}$)','gi');
+var unixDate = new RegExp('(^\\d{1,14}$)','g');
 var tmpObj ={};
 app.listen(process.env.PORT || 8080, ()=>{console.log("Server listening on ", process.env.PORT || 8080); });
 
