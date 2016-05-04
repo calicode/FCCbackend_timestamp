@@ -48,5 +48,7 @@ tmpObj = {};
 
 
 });
-
+app.get("/", (req,res) => {
+res.end("Please request either a natural language timestring \n e.x https://intense-plateau-25456.herokuapp.com/December%2015,%202015 \n or a unix timestamp https://intense-plateau-25456.herokuapp.com/1450137600");
+});
 
